@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>All Users</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 35%;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #3b1615;
+      border-right: 1px solid #3b1615;
+      border-left: 1px solid #3b1615;
+      border-top: 1px solid #3b1615;
+
+    }
+    tr:hover {
+      background-color: #d7ca56;
+    }
+  </style>
+</head>
+<body>
+<h1>Users</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Surname</th>
+    <th>Email</th>
+  </tr>
+  <tr th:each="user : ${userlist}">
+    <td> <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.firstName}"></a></td>
+    <td th:text="${user.lastName}"></td>
+    <td th:text="${user.email}"></td>
+  </tr>
+</table>
+
+<br/>
+<hr/>
+<form th:method="GET" th:action="@{/users/add}">
+  <input type="submit" value="Create new user">
+</form></body>
+</html>
