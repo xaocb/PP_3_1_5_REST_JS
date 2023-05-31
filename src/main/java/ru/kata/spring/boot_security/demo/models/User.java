@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Column(name = "email")
     @Email(message = "Enter correct email-adress")
     private String email;
-@Column(unique = true)
+    @Column(unique = true)
     private String username;
 
     private String password;
