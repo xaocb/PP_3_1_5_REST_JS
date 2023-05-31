@@ -21,8 +21,9 @@
     <br/>
     <input type="submit" value="Add user">
 </form>
-<form th:method="GET" th:action="@{/users}">
+<form th:method="GET" th:action="@{/admin}">
     <input type="submit" value="To previous page">
 </form>
+<a th:href="@{/logout}">Logout</a>
 </body>
 </html>

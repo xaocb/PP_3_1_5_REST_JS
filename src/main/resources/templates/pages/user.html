@@ -37,17 +37,6 @@
         <td th:text="${user.getEmail()}"></td>
     </tr>
 </table>
-<div>
-    <form th:method="GET" th:action="@{/admin/{id}/edit(id=${user.getId()})}">
-        <input type="submit" value="Edit user">
-    </form>
-    <form th:method="DELETE" th:action="@{/admin/{id}/delete(id=${user.getId()})}">
-        <input type="submit" value="Delete user">
-    </form>
-    <form th:method="GET" th:action="@{/admin}">
-        <input type="submit" value="To previous page">
-    </form>
-</div>
 <a th:href="@{/logout}">Logout</a>
 </body>
 </html>

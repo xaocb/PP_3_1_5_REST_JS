@@ -26,12 +26,14 @@
 <h1>Users</h1>
 <table>
   <tr>
+    <th>Id</th>
     <th>Name</th>
     <th>Surname</th>
     <th>Email</th>
   </tr>
   <tr th:each="user : ${userlist}">
-    <td> <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.firstName}"></a></td>
+    <td th:text="${user.id}"></td>
+    <td> <a th:href="@{/admin/{id}(id=${user.getId()})}" th:text="${user.firstName}"></a></td>
     <td th:text="${user.lastName}"></td>
     <td th:text="${user.email}"></td>
   </tr>
@@ -39,7 +41,9 @@
 
 <br/>
 <hr/>
-<form th:method="GET" th:action="@{/users/add}">
+<form th:method="GET" th:action="@{/admin/add}">
   <input type="submit" value="Create new user">
-</form></body>
+</form>
+<a th:href="@{/logout}">Logout</a>
+</body>
 </html>
