@@ -50,7 +50,7 @@ public class AdminsController {
         if (bindingResult.hasErrors())
             return "pages/new";
         userService.save(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
     @GetMapping("/{id}/edit")
@@ -64,13 +64,13 @@ public class AdminsController {
                          BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors())
             return "pages/edit";
-        userService.update(id, user);
+        userService.update(user);
         return "redirect:/admin";
     }
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") int id) {
         userService.delete(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 }

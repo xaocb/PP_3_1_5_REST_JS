@@ -12,9 +12,9 @@ public interface UserService extends UserDetailsService {
 
     void save(User user);
 
-    void update(long id, User updatedUser);
+    void update(User user);
 
     void delete(long id);
 
-    User findByUsername(String name);
+    User findByEmail(String username);
 }

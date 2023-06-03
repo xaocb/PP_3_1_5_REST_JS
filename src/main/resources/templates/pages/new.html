@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:method="POST" th:action="@{/users}" th:object="${user}">
+<form th:method="POST" th:action="@{/admin}" th:object="${user}">
     <label for="name">Enter name</label>
     <input type="text" th:field="*{firstName}" id="name" />
     <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name error</div>
@@ -15,9 +15,21 @@
     <input type="text" th:field="*{lastName}" id="surname" />
     <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Surname error</div>
     <br/>
+    <label for="name">Enter age</label>
+    <input type="text" th:field="*{age}" id="age" />
+    <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
+    <br/>
     <label for="email">Enter email</label>
     <input type="text" th:field="*{email}" id="email" />
     <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+    <br/>
+    <label for="password">Enter password</label>
+    <input type="text" th:field="*{password}" id="password" />
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+    <br/>
+    <label for="roles">Enter roles</label>
+    <input type="text" th:field="*{roles}" id="roles" />
+    <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Roles error</div>
     <br/>
     <input type="submit" value="Add user">
 </form>

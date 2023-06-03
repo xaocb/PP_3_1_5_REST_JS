@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,14 +23,14 @@ public class UserServiceImpl implements UserService {
         this.usersRepository = usersRepository;
     }
 
-    public User findByUsername(String username) {
-        return usersRepository.findByUsername(username);
+    public User findByEmail(String username) {
+        return usersRepository.findByEmail(username);
     }
 
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+        User user = findByEmail(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
@@ -54,10 +56,26 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void update(long id, User updatedUser) {
-        updatedUser.setId(id);
-        usersRepository.save(updatedUser);
+    public void update(User user) {
+        User currentUser = usersRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+            currentUser.setEmail(user.getEmail());
+        }
+        if (user.getAge() != null) {
+            currentUser.setAge(user.getAge());
+        }
+        if (user.getFirstName() != null && !user.getFirstName().isEmpty()) {
+            currentUser.setFirstName(user.getFirstName());
+        }
+        if (user.getLastName() != null && !user.getLastName().isEmpty()) {
+            currentUser.setLastName(user.getLastName());
+        }
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            currentUser.setPassword(user.getPassword());
+        }
+        usersRepository.save(currentUser);
     }
+
 
     @Transactional
     @Override

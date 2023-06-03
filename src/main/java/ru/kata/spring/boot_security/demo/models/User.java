@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
@@ -25,8 +27,8 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "name")
-    @NotEmpty(message = "This field can not be empty")
     @Size(min = 2, max = 15, message = "Name should be between 2 and 15 characters")
+    @NotEmpty(message = "This field can not be empty")
     private String firstName;
 
     @Column(name = "last_name")
@@ -34,30 +36,33 @@ public class User implements UserDetails {
     @Size(min = 2, max = 15, message = "Surname should be between 2 and 15 characters")
     private String lastName;
 
+    @Column(name = "age")
+    @Min(1)
+    @Max(150)
+    private Integer age;
+
     @Column(name = "email")
+    @NotEmpty(message = "This field can not be empty")
     @Email(message = "Enter correct email-adress")
     private String email;
-    @Column(unique = true)
-    private String username;
-
+    @Column
+    @NotEmpty(message = "This field can not be empty")
     private String password;
+
     @ManyToMany
     @JoinTable(name = "users_roles",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email) {
+    public User(String firstName, String lastName, String email, Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
+        this.age = age;
     }
 
     @Override
@@ -79,17 +84,20 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     public void setPassword(String password) {
@@ -126,6 +134,14 @@ public class User implements UserDetails {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public String getEmail() {

@@ -14,13 +14,17 @@
   <input type="text" th:field="*{lastName}" id="surname" />
   <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Surname error</div>
   <br/>
+  <label for="surname">Enter age</label>
+  <input type="text" th:field="*{age}" id="age" />
+  <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
+  <br/>
   <label for="email">Enter email</label>
   <input type="text" th:field="*{email}" id="email" />
   <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
   <br/>
   <input type="submit" value="Update user">
 </form>
-<form th:method="GET" th:action="@{/users}">
+<form th:method="GET" th:action="@{/admin}">
   <input type="submit" value="To previous page">
 </form>
 <a th:href="@{/logout}">Logout</a>

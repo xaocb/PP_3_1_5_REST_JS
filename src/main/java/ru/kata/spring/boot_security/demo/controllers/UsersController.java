@@ -20,7 +20,7 @@ public class UsersController {
 
     @GetMapping("/user")
     public String getUserById(Principal principal, Model model) {
-        User user = userService.findByUsername(principal.getName());
+        User user = userService.findByEmail(principal.getName());
         model.addAttribute("user", userService.getUserInfo(user.getId()));
         return "pages/user";
     }

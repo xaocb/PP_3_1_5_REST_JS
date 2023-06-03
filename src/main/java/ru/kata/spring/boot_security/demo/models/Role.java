@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.models;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,5 +48,16 @@ public class Role implements GrantedAuthority {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        if ("ROLE_USER".equals(getAuthority())) {
+            return "USER";
+        } else if ("ROLE_ADMIN".equals(getAuthority())) {
+            return "ADMIN";
+        } else {
+            return getAuthority();
+        }
     }
 }

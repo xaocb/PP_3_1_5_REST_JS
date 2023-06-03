@@ -29,13 +29,17 @@
     <th>Id</th>
     <th>Name</th>
     <th>Surname</th>
+    <th>Age</th>
     <th>Email</th>
+    <th>Role</th>
   </tr>
   <tr th:each="user : ${userlist}">
     <td th:text="${user.id}"></td>
     <td> <a th:href="@{/admin/{id}(id=${user.getId()})}" th:text="${user.firstName}"></a></td>
     <td th:text="${user.lastName}"></td>
+    <td th:text="${user.age}"></td>
     <td th:text="${user.email}"></td>
+    <td th:text="${user.getRoles()}"></td>
   </tr>
 </table>
 
