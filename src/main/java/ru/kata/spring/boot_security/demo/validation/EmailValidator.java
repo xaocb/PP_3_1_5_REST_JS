@@ -12,6 +12,6 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        return usersRepository.countByEmail(email) > 0;
+        return usersRepository.countByEmail(email) == 0;
     }
 }
