@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.repositories.RolesRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
@@ -20,16 +21,22 @@ import javax.validation.Valid;
 @RequestMapping("/admin")
 public class AdminsController {
     private final UserService userService;
+    private final RolesRepository rolesRepository;
 
     @Autowired
-    public AdminsController(UserService userService) {
+    public AdminsController(UserService userService, RolesRepository rolesRepository) {
         this.userService = userService;
+        this.rolesRepository = rolesRepository;
     }
 
     @GetMapping()
     public String findAllUsers(Model model) {
+        User user = userService.getAuthUser();
         model.addAttribute("userlist", userService.findAllUsers());
-        return "pages/users";
+        model.addAttribute("newUser", new User());
+        model.addAttribute("rolelist", rolesRepository.findAll());
+        model.addAttribute("title", user);
+        return "pages/admin";
     }
 
     @GetMapping("/{id}")
@@ -38,37 +45,36 @@ public class AdminsController {
         return "pages/getUserInfo";
     }
 
-    @GetMapping("/add")
-    public String addUser(Model model) {
-        model.addAttribute("user", new User());
-        return "pages/new";
-    }
+//    @GetMapping("/add")
+//    public String addUser(Model model) {
+//        model.addAttribute("user", new User());
+//        return "pages/new";
+//    }
 
     @PostMapping
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "pages/new";
+            return "pages/admin";
         userService.save(user);
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userService.getUserInfo(id));
-        return "pages/edit";
-    }
+//    @GetMapping("/{id}/edit")
+//    public String edit(Model model, @PathVariable("id") int id) {
+//        model.addAttribute("user", userService.getUserInfo(id));
+//        return "pages/edit";
+//    }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
-        if (bindingResult.hasErrors())
-            return "pages/edit";
+    public String update(@ModelAttribute("user") @Valid User user) {
+//        if (bindingResult.hasErrors())
+//            return "pages/admin";
         userService.update(user);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         userService.delete(id);
         return "redirect:/admin";

@@ -2,6 +2,8 @@ package ru.kata.spring.boot_security.demo.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,11 @@ public class UserServiceImpl implements UserService {
         return getUser.orElse(null);
     }
 
+    public User getAuthUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return usersRepository.findByEmail(auth.getName());
+    }
+
     @Transactional
     @Override
     public void save(User user) {
@@ -73,7 +80,15 @@ public class UserServiceImpl implements UserService {
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             currentUser.setPassword(user.getPassword());
         }
+        currentUser.setRoles(user.getRoles());
         usersRepository.save(currentUser);
+//        editedUser.setFirstName(user.getFirstName());
+//        editedUser.setLastName(user.getLastName());
+//        editedUser.setAge(user.getAge());
+//        editedUser.setEmail(user.getEmail());
+//        editedUser.setPassword(user.getPassword());
+//        editedUser.setRoles(user.getRoles());
+//        usersRepository.save(editedUser);
     }
 
 

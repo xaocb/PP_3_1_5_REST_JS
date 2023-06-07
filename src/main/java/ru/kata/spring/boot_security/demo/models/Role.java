@@ -28,6 +28,11 @@ public class Role implements GrantedAuthority {
         return getName();
     }
 
+    public String getNoPrefix() {
+        String pr = "ROLE_";
+        return name.substring(pr.length());
+    }
+
     public Role(Long id, String name) {
         this.id = id;
         this.name = name;

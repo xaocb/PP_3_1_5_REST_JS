@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.models;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.kata.spring.boot_security.demo.validation.ValidEmail;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,13 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.util.Collection;
 
+
+import java.util.Collection;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -27,26 +24,26 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "name")
-    @Size(min = 2, max = 15, message = "Name should be between 2 and 15 characters")
-    @NotEmpty(message = "This field can not be empty")
+//    @Size(min = 2, max = 15, message = "Name should be between 2 and 15 characters")
+//    @NotEmpty(message = "This field can not be empty")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotEmpty(message = "This field can not be empty")
-    @Size(min = 2, max = 15, message = "Surname should be between 2 and 15 characters")
+//    @NotEmpty(message = "This field can not be empty")
+//    @Size(min = 2, max = 15, message = "Surname should be between 2 and 15 characters")
     private String lastName;
 
     @Column(name = "age")
-    @Min(1)
-    @Max(150)
+//    @Min(1)
+//    @Max(150)
     private Integer age;
-
+//    @ValidEmail
     @Column(name = "email")
-    @NotEmpty(message = "This field can not be empty")
-    @Email(message = "Enter correct email-adress")
+//    @NotEmpty(message = "This field can not be empty")
+//    @ValidEmail(message = "Enter correct email-adress")
     private String email;
     @Column
-    @NotEmpty(message = "This field can not be empty")
+//    @NotEmpty(message = "This field can not be empty")
     private String password;
 
     @ManyToMany
@@ -64,6 +61,7 @@ public class User implements UserDetails {
         this.email = email;
         this.age = age;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
