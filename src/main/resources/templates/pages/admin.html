@@ -46,7 +46,7 @@
 
 <ul class="nav bg-dark  ">
   <li class="nav-item ">
-    <!--        <a class="nav-link active text-light" th:text="|${title.email} with toles: ADMIN|"></a>-->
+            <a class="nav-link active text-light" th:text="|${title.email} with roles: ${title.convertSetOfRoleToString(title.getRoles())}|"></a>
   </li>
 
   <li class="nav-item navbar-nav ml-auto pr-3 ">
@@ -119,10 +119,8 @@
                     <td th:utext="${user.email}"></td>
                     <td>
                       <th:block th:each="role : ${user.roles}">
-                        <span th:text="${role.getName()}"></span>
+                        <span th:text="${role.getNoPrefix()}"></span>
                       </th:block>
-
-
                     </td>
                     <td>
                       <button class="btn btn-info"  data-toggle="modal" th:href="${'#edit'+user.id}">edit</button>
@@ -167,7 +165,7 @@
                                 </div>
                                 <div class="form-group">
                                   <label for="formGroupExamplePassword" class="d-flex justify-content-center mb-0 font-weight-bold">Password</label>
-                                  <input type="text" class="form-control form-control-sm w-50 mx-auto" id="formGroupExamplePassword" th:name="password"  th:value="${user.password}" placeholder="Password">
+                                  <input type="text" class="form-control form-control-sm w-50 mx-auto" id="formGroupExamplePassword" th:name="password"  placeholder="Password">
                                 </div>
                                 <div class="form-group">
                                   <label  class="d-flex justify-content-center mb-0 font-weight-bold">Role</label>
@@ -260,25 +258,23 @@
                 <form th:action="@{/admin}" th:method="post" th:object="${newUser}">
                   <div class="form-group mt-3">
                     <label for="firstname" class="d-flex justify-content-center mb-0 font-weight-bold">First name</label>
-                    <input type="text" class="form-control form-control-sm w-25 mx-auto" th:field="*{firstName}" id="firstname" placeholder="First name"
-                    required>
+                    <input type="text" class="form-control form-control-sm w-25 mx-auto" th:field="*{firstName}" id="firstname" placeholder="First name" required>
                   </div>
                   <div class="form-group">
                     <label for="surname" class="d-flex justify-content-center mb-0 font-weight-bold">Last name</label>
-                    <input type="text" class="form-control form-control-sm w-25 mx-auto" th:field="*{lastName}" id="surname" placeholder="Last name">
+                    <input type="text" class="form-control form-control-sm w-25 mx-auto" th:field="*{lastName}" id="surname" placeholder="Last name" required>
                   </div>
                   <div class="form-group">
                     <label for="age" class="d-flex justify-content-center mb-0 font-weight-bold">Age</label>
-                    <input type="text" class="form-control form-control-sm w-25 mx-auto" th:field="*{age}" id="age" placeholder="Age">
+                    <input type="text" class="form-control form-control-sm w-25 mx-auto" th:field="*{age}" id="age" placeholder="Age" required>
                   </div>
                   <div class="form-group">
                     <label for="email" class="d-flex justify-content-center mb-0 font-weight-bold">Email</label>
-                    <input type="text" class="form-control form-control-sm w-25 mx-auto" th:field="*{email}" id="email" placeholder="Email"
-                    required >
+                    <input type="text" class="form-control form-control-sm w-25 mx-auto" th:field="*{email}" id="email" placeholder="Email" required >
                   </div>
                   <div class="form-group">
                     <label for="password" class="d-flex justify-content-center mb-0 font-weight-bold">Password</label>
-                    <input type="text" class="form-control form-control-sm w-25 mx-auto" id="password" th:field="*{password}" placeholder="Password">
+                    <input type="text" class="form-control form-control-sm w-25 mx-auto" id="password" th:field="*{password}" placeholder="Password" required>
                   </div>
                   <div class="form-group">
                     <label for="role" class="d-flex justify-content-center mb-0 font-weight-bold">Role</label>
@@ -329,7 +325,11 @@
                 <td th:text="${title.lastName}"></td>
                 <td th:text="${title.age}"></td>
                 <td th:text="${title.email}"></td>
-                <td th:text="${title.getRoles()}"></td>
+                <td>
+                  <th:block th:each="role : ${title.roles}">
+                    <span th:text="${role.getNoPrefix()}"></span>
+                  </th:block>
+                </td>
               </tr>
               </tbody>
             </table>

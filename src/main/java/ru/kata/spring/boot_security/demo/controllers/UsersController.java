@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.repositories.RolesRepository;
+import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
@@ -19,8 +21,9 @@ public class UsersController {
     }
 
     @GetMapping("/user")
-    public String getUserById(Principal principal, Model model) {
-        User user = userService.findByEmail(principal.getName());
+    public String getUserById(Model model) {
+        User user = userService.getAuthUser();
+        model.addAttribute("rolelist", user.getRoles());
         model.addAttribute("user", userService.getUserInfo(user.getId()));
         return "pages/user";
     }

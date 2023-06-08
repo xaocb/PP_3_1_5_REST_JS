@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
@@ -17,12 +19,15 @@ import java.util.Optional;
 
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
+
     private final UsersRepository usersRepository;
 
-    @Autowired
-    public UserServiceImpl(UsersRepository usersRepository) {
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserServiceImpl(UsersRepository usersRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.usersRepository = usersRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public User findByEmail(String username) {
@@ -58,6 +63,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void save(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         usersRepository.save(user);
     }
 
@@ -78,19 +84,11 @@ public class UserServiceImpl implements UserService {
             currentUser.setLastName(user.getLastName());
         }
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            currentUser.setPassword(user.getPassword());
+            currentUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
         currentUser.setRoles(user.getRoles());
         usersRepository.save(currentUser);
-//        editedUser.setFirstName(user.getFirstName());
-//        editedUser.setLastName(user.getLastName());
-//        editedUser.setAge(user.getAge());
-//        editedUser.setEmail(user.getEmail());
-//        editedUser.setPassword(user.getPassword());
-//        editedUser.setRoles(user.getRoles());
-//        usersRepository.save(editedUser);
     }
-
 
     @Transactional
     @Override

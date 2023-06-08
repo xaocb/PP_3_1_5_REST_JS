@@ -14,19 +14,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.RolesRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.validation.EmailValidator;
+
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminsController {
+
     private final UserService userService;
+
     private final RolesRepository rolesRepository;
 
+    private final EmailValidator emailValidator;
+
     @Autowired
-    public AdminsController(UserService userService, RolesRepository rolesRepository) {
+    public AdminsController(UserService userService, RolesRepository rolesRepository, EmailValidator emailValidator) {
         this.userService = userService;
         this.rolesRepository = rolesRepository;
+        this.emailValidator = emailValidator;
     }
 
     @GetMapping()
@@ -39,11 +46,11 @@ public class AdminsController {
         return "pages/admin";
     }
 
-    @GetMapping("/{id}")
-    public String getUserById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUserInfo(id));
-        return "pages/getUserInfo";
-    }
+//    @GetMapping("/{id}")
+//    public String getUserById(@PathVariable("id") int id, Model model) {
+//        model.addAttribute("user", userService.getUserInfo(id));
+//        return "pages/getUserInfo";
+//    }
 
 //    @GetMapping("/add")
 //    public String addUser(Model model) {
@@ -54,8 +61,9 @@ public class AdminsController {
     @PostMapping
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "pages/admin";
+        emailValidator.validateNewUserEmail(user, bindingResult);
+        if (bindingResult.hasErrors()){
+            return "pages/admin";}
         userService.save(user);
         return "redirect:/admin";
     }
@@ -67,9 +75,10 @@ public class AdminsController {
 //    }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid User user) {
-//        if (bindingResult.hasErrors())
-//            return "pages/admin";
+    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+        emailValidator.validateEditedUserEmail(user, bindingResult);
+        if (bindingResult.hasErrors()){
+            return "pages/admin";}
         userService.update(user);
         return "redirect:/admin";
     }
