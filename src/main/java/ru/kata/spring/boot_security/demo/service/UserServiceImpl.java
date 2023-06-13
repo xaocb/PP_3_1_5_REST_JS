@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.Util.UserNotFoundException;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
 
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getUserInfo(long id) {
         Optional<User> getUser = usersRepository.findById(id);
-        return getUser.orElse(null);
+        return getUser.orElseThrow(UserNotFoundException::new);
     }
 
     public User getAuthUser() {

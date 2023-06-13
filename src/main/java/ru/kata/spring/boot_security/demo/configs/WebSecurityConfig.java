@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
@@ -29,21 +30,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/login").permitAll()
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().successHandler(successUserHandler)
+                .formLogin()
+                .successHandler(successUserHandler)
+                .loginProcessingUrl("/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/")
-                .permitAll();
+                .logout()
+                .permitAll()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login")
+                .and().cors().and().csrf()
+                .disable();
     }
 
     @Bean
     public static BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        return daoAuthenticationProvider;
     }
 
     @Autowired

@@ -26,7 +26,7 @@ public class DataInitializer implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet(){
         Role roleAdmin = new Role(1L, "ROLE_ADMIN");
         Role roleUser = new Role(2L, "ROLE_USER");
 
